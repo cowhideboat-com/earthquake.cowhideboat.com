@@ -1,175 +1,249 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-  <meta charset="UTF-8">
-  <title>地震預言倒數 | earthquake.cowhideboat.com</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>地震預言倒數｜earthquake.cowhideboat.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      text-align: center;
-      margin: 0;
-      padding: 2em;
-      transition: background 0.3s, color 0.3s;
-      animation: fadeInUp 0.8s ease-out;
+    :root {
+      --bg: #f5f5f5;
+      --fg: #333;
+      --primary: #007ACC;
+      --primary2: #00C6FF;
+      --accent: #cc0000;
+      --card-bg: #fff;
+      --card-shadow: rgba(0,0,0,0.1);
+      --discord: #7289da;
     }
-
     .dark-mode {
-      background-color: #1a1a1a;
-      color: #eee;
+      --bg: #1a1a1a; --fg: #eee;
+      --primary: #3c8dbc; --primary2: #66c2ff;
+      --accent: #ff6600;
+      --card-bg: #2a2a2a; --card-shadow: rgba(0,0,0,0.4);
+      --discord: #5b6eae;
     }
 
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family:"Segoe UI",sans-serif;
+      background:var(--bg); color:var(--fg);
+      display:flex; flex-direction:column; align-items:center;
+      min-height:100vh; transition:background .3s,color .3s;
+    }
     h1 {
-      font-size: 2em;
-      color: #cc0000;
+      margin:1em 0 .5em; color:var(--accent);
+      animation:fadeInUp .6s ease-out;
     }
-
+    .container {
+      width:100%; max-width:800px; padding:0 1em;
+      display:flex; flex-direction:column; gap:1.5em;
+      animation:fadeInUp .6s ease-out;
+    }
+    .grid-2 {
+      display:grid; grid-template-columns:1fr 1fr; gap:1em;
+    }
+    @media(max-width:600px){ .grid-2{grid-template-columns:1fr;} }
+    .card {
+      background:var(--card-bg); border-radius:8px;
+      box-shadow:0 2px 8px var(--card-shadow);
+      padding:1em; transition:background .3s,color .3s;
+    }
+    /* 倒數區 */
     #countdown {
-      font-size: 2.5em;
-      color: #007ACC;
-      margin: 1em 0;
-      animation: pulse 1s infinite;
+      position:relative; display:inline-block;
+      padding:.5em 1em; border-radius:8px;
+      background:var(--card-bg);
+      box-shadow:0 0 15px rgba(255,100,100,0.5);
+      overflow:hidden; animation:pulse 1s infinite;
     }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    #countdown::before {
+      content:""; position:absolute; top:-50%; left:-50%;
+      width:200%; height:200%;
+      background:radial-gradient(circle at center,
+        rgba(255,100,100,0.3),transparent 70%);
+      animation:glow 3s infinite;
     }
-
+    @keyframes glow {
+      0%   {transform:scale(0.8) translate(0,0); opacity:.5;}
+      50%  {transform:scale(1.2) translate(10px,10px); opacity:1;}
+      100% {transform:scale(0.8) translate(0,0); opacity:.5;}
+    }
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); color: #FF6600; }
-      100% { transform: scale(1); }
+      0%   {transform:scale(1);}
+      50%  {transform:scale(1.05);}
+      100% {transform:scale(1);}
     }
-
-    @keyframes flash {
-      0%, 100% { background-color: #ff0000; }
-      50% { background-color: #880000; }
+    #countdown span {
+      font-family:'Orbitron',sans-serif;
+      font-size:2.2em;
+      background:linear-gradient(90deg,var(--primary),var(--primary2));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      text-shadow:2px 2px 4px rgba(0,0,0,0.3);
     }
-
-    @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(-5px, 0); }
-      50% { transform: translate(5px, 0); }
-      75% { transform: translate(-5px, 0); }
-      100% { transform: translate(0, 0); }
+    /* 按鈕群 */
+    .btn-group {
+      display:flex; flex-wrap:wrap; gap:.5em; justify-content:center;
+      animation:fadeInUp .6s ease-out;
     }
-
-    .shake {
-      animation: shake 0.2s infinite;
+    .btn {
+      padding:.6em 1.2em; background:var(--primary);
+      color:#fff; border:none; border-radius:4px;
+      cursor:pointer; font-size:.9em;
+      transition:background .2s,transform .1s;
     }
+    .btn:hover { background:#005a99; }
+    .btn:active { transform:scale(.98); }
 
-    #location {
-      margin: 1em 0;
-      font-size: 1em;
-      color: #666;
+    /* Discord 只讀 & 邀請按鈕 */
+    #discordWidget {
+      background:var(--card-bg); border-radius:8px;
+      box-shadow:0 2px 8px var(--card-shadow);
+      padding:1em; transition:background .3s,color .3s;
+      animation:fadeInUp .6s ease-out;
     }
-
-    #mapFrame {
-      width: 100%;
-      height: 300px;
-      border: none;
-      margin-top: 1em;
+    #discordWidget .widget-header {
+      display:flex; justify-content:space-between;
+      align-items:center; margin-bottom:.5em;
     }
-
-    .share-btn, #themeToggle {
-      margin: 0.5em;
-      padding: 0.5em 1em;
-      border: none;
-      background-color: #007ACC;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
+    #discordWidget h2 {
+      color:var(--accent);
+      margin:0;
     }
+    .invite-btn {
+      padding:.5em .8em;
+      background:var(--discord); color:#fff;
+      border:none; border-radius:4px;
+      cursor:pointer; font-size:.85em;
+      transition:background .2s;
+    }
+    .invite-btn:hover { background:darken(var(--discord),10%); }
 
+    /* Footer */
     footer {
-      font-size: 0.9em;
-      color: #777;
-      margin-top: 2em;
+      margin:2em 0; font-size:.8em; color:#777;
+      text-align:center; animation:fadeInUp .6s ease-out;
     }
+    @keyframes fadeInUp {
+      from {opacity:0; transform:translateY(20px);} 
+      to   {opacity:1; transform:translateY(0);}
+    }
+    @keyframes flash {
+      0%,100% {background:var(--accent);} 
+      50%     {background:rgba(136,0,0,0.8);}
+    }
+    @keyframes shake {
+      0%   {transform:translateX(0);} 
+      25%  {transform:translateX(-5px);} 
+      50%  {transform:translateX(5px);} 
+      75%  {transform:translateX(-5px);} 
+      100% {transform:translateX(0);}
+    }
+    .shake { animation:shake .2s infinite; }
   </style>
 </head>
 <body>
   <h1>地震預言倒數</h1>
-  <div id="countdown">正在計算...</div>
-  <div id="location">🔍 正在偵測你的位置...</div>
-  <iframe id="mapFrame"></iframe>
+  <div class="container">
+    <div class="grid-2">
+      <div class="card">
+        <div id="countdown"><span>載入中…</span></div>
+      </div>
+      <div class="card">
+        <div id="location">🔍 偵測位置中…</div>
+        <iframe id="mapFrame"></iframe>
+      </div>
+    </div>
 
-  <button class="share-btn" onclick="shareOnTwitter()">分享到 Twitter</button>
-  <button class="share-btn" onclick="shareOnFacebook()">分享到 Facebook</button>
-  <button class="share-btn" onclick="copyDiscordMessage()">分享至 Discord</button>
-  <button id="themeToggle" onclick="toggleTheme()">切換主題</button>
+    <div class="btn-group">
+      <button class="btn" onclick="shareOnTwitter()">Twitter</button>
+      <button class="btn" onclick="shareOnFacebook()">Facebook</button>
+      <button class="btn" onclick="copyDiscordMessage()">Discord</button>
+      <button class="btn" id="themeToggle" onclick="toggleTheme()">切換主題</button>
+    </div>
+
+    <section id="discordWidget">
+      <div class="widget-header">
+        <h2>💬 Discord 留言版</h2>
+        <button class="invite-btn"
+          onclick="window.open('https://discord.gg/QKpXaXaEwg','_blank')">
+          加入 Discord 伺服器
+        </button>
+      </div>
+      <iframe
+        src="https://discord.com/widget?
+             id=1390691681350713405
+             &channel=1390691682252750883
+             &theme=dark"
+        width="100%" height="400"
+        allowtransparency="true"
+        frameborder="0">
+      </iframe>
+    </section>
+  </div>
 
   <footer>
-    &copy; 2025 earthquake.cowhideboat.com | 版權所有<br>
+    &copy; 2025 earthquake.cowhideboat.com<br>
     本網站僅作為娛樂用途，不代表任何地震預測或預警
   </footer>
 
-  <audio id="alertSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
-
+  <audio id="alertSound"
+         src="https://www.soundjay.com/button/beep-07.wav"
+         preload="auto"></audio>
   <script>
-    const targetTime = new Date("2025-07-04T21:10:00+08:00").getTime();
+    const targetTime = new Date("2025-07-04T22:27:00+08:00").getTime();
+    let userLocation = "未知地點";
+    const countdownEl = document.getElementById("countdown");
 
     function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetTime - now;
-
-      if (distance <= 0) {
-        document.getElementById("countdown").innerText = "⚡ 預言時間已發動 ⚡";
-        document.getElementById("alertSound").play();
-
-        // 畫面切紅 + 閃爍 + 地震搖晃
+      const dist = targetTime - Date.now();
+      if (dist <= 0) {
+        countdownEl.innerHTML = '<span>⚡ 預言時間已發動 ⚡</span>';
         document.body.style.animation = "flash 1s infinite";
         document.body.classList.add("shake");
-
-        // 手機震動（需 HTTPS）
-        if (navigator.vibrate) {
-          navigator.vibrate([500, 200, 500, 200, 1000]);
-        }
-
+        document.getElementById("alertSound").play();
+        if (navigator.vibrate) navigator.vibrate([500,200,500,200,1000]);
         clearInterval(timer);
         return;
       }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("countdown").innerText =
-        `${days}天 ${hours}小時 ${minutes}分 ${seconds}秒`;
+      const d = Math.floor(dist / 86400000),
+            h = Math.floor((dist % 86400000) / 3600000),
+            m = Math.floor((dist % 3600000) / 60000),
+            s = Math.floor((dist % 60000) / 1000);
+      countdownEl.innerHTML = `<span>${d}天 ${h}小時 ${m}分 ${s}秒</span>`;
     }
-
     const timer = setInterval(updateCountdown, 1000);
     updateCountdown();
 
     fetch("https://ipapi.co/json/")
-      .then(response => response.json())
-      .then(data => {
-        const locationText = `${data.city}, ${data.region}, ${data.country_name}`;
-        document.getElementById("location").innerText = `📍 你的位置：${locationText}`;
+      .then(r=>r.json()).then(data=>{
+        userLocation = `${data.city}, ${data.region}`;
+        document.getElementById("location").innerText =
+          `📍 你的位置：${userLocation}`;
         document.getElementById("mapFrame").src =
-          `https://www.google.com/maps?q=${encodeURIComponent(data.city + "," + data.region)}&output=embed`;
+          `https://www.google.com/maps?q=${encodeURIComponent(data.city+','+data.region)}&output=embed`;
       });
 
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
     }
-
     function shareOnTwitter() {
-      window.open("https://twitter.com/intent/tweet?text=地震預言倒數！快來看看！&url=https://earthquake.cowhideboat.com", "_blank");
+      window.open(
+        "https://twitter.com/intent/tweet?text=地震預言倒數！快來看看！&url=https://earthquake.cowhideboat.com",
+        "_blank"
+      );
     }
-
     function shareOnFacebook() {
-      window.open("https://www.facebook.com/sharer/sharer.php?u=https://earthquake.cowhideboat.com", "_blank");
+      window.open(
+        "https://www.facebook.com/sharer/sharer.php?u=https://earthquake.cowhideboat.com",
+        "_blank"
+      );
     }
-
     function copyDiscordMessage() {
-      const countdownText = document.getElementById("countdown").innerText;
-      const msg = `🌍 地震預言倒數：距離預言時間還有 ${countdownText}！來看看：https://earthquake.cowhideboat.com`;
-      navigator.clipboard.writeText(msg).then(() => alert("已複製分享文字！可貼到 Discord"));
+      const txt = document.getElementById("countdown").innerText;
+      const msg = `🌍 地震預言倒數：距離預言時間還有 ${txt}！https://earthquake.cowhideboat.com`;
+      navigator.clipboard.writeText(msg).then(()=>alert("已複製，可貼到 Discord"));
     }
   </script>
 </body>
