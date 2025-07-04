@@ -17,145 +17,234 @@
       --discord: #7289da;
     }
     .dark-mode {
-      --bg: #1a1a1a; --fg: #eee;
-      --primary: #3c8dbc; --primary2: #66c2ff;
+      --bg: #1a1a1a;
+      --fg: #eee;
+      --primary: #3c8dbc;
+      --primary2: #66c2ff;
       --accent: #ff6600;
-      --card-bg: #2a2a2a; --card-shadow: rgba(0,0,0,0.4);
+      --card-bg: #2a2a2a;
+      --card-shadow: rgba(0,0,0,0.4);
       --discord: #5b6eae;
     }
 
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family:"Segoe UI",sans-serif;
-      background:var(--bg); color:var(--fg);
-      display:flex; flex-direction:column; align-items:center;
-      min-height:100vh; transition:background .3s,color .3s;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: background .3s, color .3s;
     }
     h1 {
-      margin:1em 0 .5em; color:var(--accent);
-      animation:fadeInUp .6s ease-out;
+      margin: 1em 0 .5em;
+      color: var(--accent);
+      animation: fadeInUp .6s ease-out;
     }
     .container {
-      width:100%; max-width:800px; padding:0 1em;
-      display:flex; flex-direction:column; gap:1.5em;
-      animation:fadeInUp .6s ease-out;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 1em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      animation: fadeInUp .6s ease-out;
     }
     .grid-2 {
-      display:grid; grid-template-columns:1fr 1fr; gap:1em;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
     }
-    @media(max-width:600px){ .grid-2{grid-template-columns:1fr;} }
+    @media(max-width: 600px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
     .card {
-      background:var(--card-bg); border-radius:8px;
-      box-shadow:0 2px 8px var(--card-shadow);
-      padding:1em; transition:background .3s,color .3s;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--card-shadow);
+      padding: 1em;
+      transition: background .3s, color .3s;
     }
-    /* 倒數區 */
+
+    /* —— 新版倒數區 —— */
+    #countdownContainer {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
     #countdown {
-      position:relative; display:inline-block;
-      padding:.5em 1em; border-radius:8px;
-      background:var(--card-bg);
-      box-shadow:0 0 15px rgba(255,100,100,0.5);
-      overflow:hidden; animation:pulse 1s infinite;
+      position: relative;
+      display: inline-block;
+      padding: 0.6em 1em;
+      border-radius: 10px;
+      background: var(--card-bg);
+      box-shadow: 0 0 15px rgba(255,100,100,0.4);
+      animation: pulse 1.2s infinite;
+      overflow: hidden;
+      white-space: nowrap;
     }
     #countdown::before {
-      content:""; position:absolute; top:-50%; left:-50%;
-      width:200%; height:200%;
-      background:radial-gradient(circle at center,
-        rgba(255,100,100,0.3),transparent 70%);
-      animation:glow 3s infinite;
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255,100,100,0.3),
+        transparent 70%
+      );
+      animation: glow 3s infinite;
     }
-    @keyframes glow {
-      0%   {transform:scale(0.8) translate(0,0); opacity:.5;}
-      50%  {transform:scale(1.2) translate(10px,10px); opacity:1;}
-      100% {transform:scale(0.8) translate(0,0); opacity:.5;}
+    #countdownText {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2em;
+      line-height: 1.2;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
-    @keyframes pulse {
-      0%   {transform:scale(1);}
-      50%  {transform:scale(1.05);}
-      100% {transform:scale(1);}
+    @media (max-width: 400px) {
+      #countdownText {
+        font-size: 1.5em;
+      }
     }
-    #countdown span {
-      font-family:'Orbitron',sans-serif;
-      font-size:2.2em;
-      background:linear-gradient(90deg,var(--primary),var(--primary2));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      text-shadow:2px 2px 4px rgba(0,0,0,0.3);
-    }
+
     /* 按鈕群 */
     .btn-group {
-      display:flex; flex-wrap:wrap; gap:.5em; justify-content:center;
-      animation:fadeInUp .6s ease-out;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5em;
+      justify-content: center;
+      animation: fadeInUp .6s ease-out;
     }
     .btn {
-      padding:.6em 1.2em; background:var(--primary);
-      color:#fff; border:none; border-radius:4px;
-      cursor:pointer; font-size:.9em;
-      transition:background .2s,transform .1s;
+      padding: .6em 1.2em;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: .9em;
+      transition: background .2s, transform .1s;
     }
-    .btn:hover { background:#005a99; }
-    .btn:active { transform:scale(.98); }
+    .btn:hover {
+      background: #005a99;
+    }
+    .btn:active {
+      transform: scale(.98);
+    }
 
     /* Discord 只讀 & 邀請按鈕 */
     #discordWidget {
-      background:var(--card-bg); border-radius:8px;
-      box-shadow:0 2px 8px var(--card-shadow);
-      padding:1em; transition:background .3s,color .3s;
-      animation:fadeInUp .6s ease-out;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--card-shadow);
+      padding: 1em;
+      transition: background .3s, color .3s;
+      animation: fadeInUp .6s ease-out;
     }
     #discordWidget .widget-header {
-      display:flex; justify-content:space-between;
-      align-items:center; margin-bottom:.5em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .5em;
     }
     #discordWidget h2 {
-      color:var(--accent);
-      margin:0;
+      color: var(--accent);
+      margin: 0;
     }
     .invite-btn {
-      padding:.5em .8em;
-      background:var(--discord); color:#fff;
-      border:none; border-radius:4px;
-      cursor:pointer; font-size:.85em;
-      transition:background .2s;
+      padding: .5em .8em;
+      background: var(--discord);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: .85em;
+      transition: background .2s;
     }
-    .invite-btn:hover { background:darken(var(--discord),10%); }
+    .invite-btn:hover {
+      background: #5a6cbe;
+    }
 
     /* Footer */
     footer {
-      margin:2em 0; font-size:.8em; color:#777;
-      text-align:center; animation:fadeInUp .6s ease-out;
+      margin: 2em 0;
+      font-size: .8em;
+      color: #777;
+      text-align: center;
+      animation: fadeInUp .6s ease-out;
     }
+
+    /* 動畫效果 */
     @keyframes fadeInUp {
-      from {opacity:0; transform:translateY(20px);} 
-      to   {opacity:1; transform:translateY(0);}
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes glow {
+      0%   { transform: scale(0.8) translate(0,0); opacity: .5; }
+      50%  { transform: scale(1.2) translate(10px,10px); opacity: 1; }
+      100% { transform: scale(0.8) translate(0,0); opacity: .5; }
+    }
+    @keyframes pulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     @keyframes flash {
-      0%,100% {background:var(--accent);} 
-      50%     {background:rgba(136,0,0,0.8);}
+      0%,100% { background: var(--accent); }
+      50%     { background: rgba(136,0,0,0.8); }
     }
     @keyframes shake {
-      0%   {transform:translateX(0);} 
-      25%  {transform:translateX(-5px);} 
-      50%  {transform:translateX(5px);} 
-      75%  {transform:translateX(-5px);} 
-      100% {transform:translateX(0);}
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-5px); }
+      50%  { transform: translateX(5px); }
+      75%  { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
     }
-    .shake { animation:shake .2s infinite; }
+    .shake {
+      animation: shake .2s infinite;
+    }
   </style>
 </head>
 <body>
   <h1>地震預言倒數</h1>
   <div class="container">
     <div class="grid-2">
+      <!-- 倒數區 -->
       <div class="card">
-        <div id="countdown"><span>載入中…</span></div>
+        <div id="countdownContainer">
+          <div id="countdown">
+            <span id="countdownText">載入中…</span>
+          </div>
+        </div>
       </div>
+      <!-- 位置 & 地圖 -->
       <div class="card">
         <div id="location">🔍 偵測位置中…</div>
-        <iframe id="mapFrame"></iframe>
+        <iframe id="mapFrame" width="100%" height="200" frameborder="0"></iframe>
       </div>
     </div>
 
+    <!-- 分享 & 主題切換 -->
     <div class="btn-group">
       <button class="btn" onclick="shareOnTwitter()">Twitter</button>
       <button class="btn" onclick="shareOnFacebook()">Facebook</button>
@@ -163,11 +252,12 @@
       <button class="btn" id="themeToggle" onclick="toggleTheme()">切換主題</button>
     </div>
 
+    <!-- Discord 小工具 -->
     <section id="discordWidget">
       <div class="widget-header">
-        <h2>💬 Discord 聯天室</h2>
+        <h2>💬 Discord 聊天室</h2>
         <button class="invite-btn"
-          onclick="window.open('https://discord.gg/QKpXaXaEwg','_blank')">
+                onclick="window.open('https://discord.gg/QKpXaXaEwg','_blank')">
           加入 Discord 聊天室
         </button>
       </div>
@@ -188,19 +278,19 @@
   <audio id="alertSound"
          src="https://www.soundjay.com/button/beep-07.wav"
          preload="auto"></audio>
+
   <script>
     const targetTime = new Date("2025-07-05T03:18:00+08:00").getTime();
-    let userLocation = "未知地點";
-    const countdownEl = document.getElementById("countdown");
+    const countdownText = document.getElementById("countdownText");
 
     function updateCountdown() {
       const dist = targetTime - Date.now();
       if (dist <= 0) {
-        countdownEl.innerHTML = '<span>⚡ 預言時間已發動 ⚡</span>';
+        countdownText.textContent = "⚡ 預言時間已發動 ⚡";
         document.body.style.animation = "flash 1s infinite";
         document.body.classList.add("shake");
         document.getElementById("alertSound").play();
-        if (navigator.vibrate) navigator.vibrate([500,200,500,200,1000]);
+        if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
         clearInterval(timer);
         return;
       }
@@ -208,23 +298,27 @@
             h = Math.floor((dist % 86400000) / 3600000),
             m = Math.floor((dist % 3600000) / 60000),
             s = Math.floor((dist % 60000) / 1000);
-      countdownEl.innerHTML = `<span>${d}天 ${h}小時 ${m}分 ${s}秒</span>`;
+      countdownText.textContent = `${d}天 ${h}小時 ${m}分 ${s}秒`;
     }
+
     const timer = setInterval(updateCountdown, 1000);
     updateCountdown();
 
+    // 偵測使用者位置
     fetch("https://ipapi.co/json/")
-      .then(r=>r.json()).then(data=>{
-        userLocation = `${data.city}, ${data.region}`;
-        document.getElementById("location").innerText =
-          `📍 你的位置：${userLocation}`;
+      .then(res => res.json())
+      .then(data => {
+        const loc = `${data.city}, ${data.region}`;
+        document.getElementById("location").innerText = `📍 你的位置：${loc}`;
         document.getElementById("mapFrame").src =
-          `https://www.google.com/maps?q=${encodeURIComponent(data.city+','+data.region)}&output=embed`;
+          `https://www.google.com/maps?q=${encodeURIComponent(loc)}&output=embed`;
       });
 
+    // 主題切換
     function toggleTheme() {
       document.body.classList.toggle("dark-mode");
     }
+    // 分享功能
     function shareOnTwitter() {
       window.open(
         "https://twitter.com/intent/tweet?text=地震預言倒數！快來看看！&url=https://earthquake.cowhideboat.com",
@@ -238,9 +332,10 @@
       );
     }
     function copyDiscordMessage() {
-      const txt = document.getElementById("countdown").innerText;
+      const txt = countdownText.textContent;
       const msg = `🌍 地震預言倒數：距離預言時間還有 ${txt}！https://earthquake.cowhideboat.com`;
-      navigator.clipboard.writeText(msg).then(()=>alert("已複製，可貼到 Discord"));
+      navigator.clipboard.writeText(msg)
+        .then(() => alert("已複製，可貼到 Discord"));
     }
   </script>
 </body>
